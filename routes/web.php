@@ -22,6 +22,7 @@ use App\Models\Produit;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RemoveDepController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,13 @@ Route::get('/', function () {
 Route::get('/accueille', function () {
     return view('accueille');
 })->middleware(['auth', 'verified'])->name('accueille');
+
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->middleware('guest')
+    ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware('guest');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -139,6 +147,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/factures2/delete-all', [Facture2Controller::class, 'deleteAll'])->name('factures2.deleteAll');
     Route::get('/facturotheque/acompte/{id}', [FacturothequeController::class, 'avance'])->name('facturotheque.avance');
     Route::get('/facturotheque/export-pdf/{id}', [FacturothequeController::class, 'exportPdf'])->name('facturotheque.export-pdf');
+    Route::get('/facturotheque/exportTicket-pdf/{id}', [FacturothequeController::class, 'exportTicket'])->name('facturotheque.exportTicket-pdf');
 
     Route::get('/ajout', function() {
         return view('produit.ajout');

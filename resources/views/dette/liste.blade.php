@@ -79,7 +79,7 @@
                                     <i class="notika-icon notika-windows"></i>
                                 </div>
                                 <div class="breadcomb-ctn">
-                                    <h2>Tableau de données sorties</h2>
+                                    <h2>Tableau de données dettes</h2>
                                     <p>Bienvenue sur le <span class="bread-ntd">modèle d'administration</span> Coulibaly</p>
                                 </div>
                             </div>

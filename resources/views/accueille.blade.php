@@ -87,16 +87,12 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30 dk-res-mg-t-30">
                         <div class="website-traffic-ctn">
-                            <h2>
-                                <span class="counter" style="color: {{ $soldeCaisse < 0 ? 'red' : 'black' }};">
-                                    {{ number_format($soldeCaisse ?? 0) }}
-                                </span>  FCFA
-                            </h2>
-                            <p>Somme totale en caisse</p>
+                            <h2><span class="counter">{{number_format($totalVenduAuj ?? 0)}}</span> FCFA</h2>
+                            <p>Total vendu auj</p>
                         </div>
-                        <div class="sparkline-bar-stats1">9,4,8,6,5,6,4,8,3,5,9,5</div>
+                        <div class="sparkline-bar-stats4">2,4,8,4,5,7,4,7,3,5,7,5</div>
                     </div>
                 </div>
 
@@ -109,16 +105,21 @@
                         <div class="sparkline-bar-stats2">1,4,8,3,5,6,4,8,3,3,9,5</div>
                     </div>
                 </div>
-                
+
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30 dk-res-mg-t-30">
+                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
                         <div class="website-traffic-ctn">
-                            <h2><span class="counter">1,000</span></h2>
-                            <p>Total Support Tickets</p>
+                            <h2>
+                                <span class="counter" style="color: {{ $soldeCaisse < 0 ? 'red' : 'black' }};">
+                                    {{ number_format($soldeCaisse ?? 0) }}
+                                </span>  FCFA
+                            </h2>
+                            <p>Somme totale en caisse</p>
                         </div>
-                        <div class="sparkline-bar-stats4">2,4,8,4,5,7,4,7,3,5,7,5</div>
+                        <div class="sparkline-bar-stats1">9,4,8,6,5,6,4,8,3,5,9,5</div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>

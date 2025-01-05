@@ -8,6 +8,7 @@ use App\Models\Facturotheque;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AccueilleController extends Controller
 {
@@ -46,9 +47,9 @@ class AccueilleController extends Controller
                     ->first();
             } else {
                 // Si la période est une date spécifique (ex: aujourd'hui, hier)
-                $total = Facture::whereDate('created_at', $period)->sum('montant');
-                $max = Facture::whereDate('created_at', $period)->max('montant');
-                $min = Facture::whereDate('created_at', $period)->min('montant');
+                $total = Facturotheque::whereDate('created_at', $period)->sum('total');
+                $max = Facturotheque::whereDate('created_at', $period)->max('total');
+                $min = Facturotheque::whereDate('created_at', $period)->min('total');
 
                 // Récupérer le produit le plus vendu pour cette période
                 $topProduct = Facture::whereDate('created_at', $period)
@@ -80,19 +81,28 @@ class AccueilleController extends Controller
      */
     public function caisse()
     {
-        // Calculer le total des factures
-        $totalFactures = Facturotheque::sum('total');
+        // Récupérer la date actuelle
+        $aujourdhui = Carbon::today();
 
-        // Calculer le total des dépenses
-        $totalDepenses = Expense::sum('amount');
+        // Calculer les totaux globaux et d'aujourd'hui pour les factures et les dépenses
+        $totaux = [
+            'totalFactures' => Facturotheque::sum('total'),
+            'totalFacturesAujourdhui' => Facturotheque::whereDate('created_at', $aujourdhui)->sum('total'),
+            'totalDepenses' => Expense::sum('amount'),
+            'totalDepensesAujourdhui' => Expense::whereDate('created_at', $aujourdhui)->sum('amount'),
+        ];
+        
+        // Calculer les totaux supplémentaires
+        $totaux['totalVenduAuj'] = $totaux['totalFacturesAujourdhui'] - $totaux['totalDepensesAujourdhui'];
+        $totaux['soldeCaisse'] = $totaux['totalFactures'] - $totaux['totalDepenses'];
 
-        // Calculer le solde en caisse après dépenses
-        $soldeCaisse = $totalFactures - $totalDepenses;
-
+        // Compter le nombre de produits
         $nombreProduit = Produit::count();
 
-        return view('accueille', compact('soldeCaisse', 'totalDepenses', 'nombreProduit'));
+        // Retourner les données à la vue
+        return view('accueille', array_merge($totaux, compact('nombreProduit')));
     }
+
 
 
     /**

@@ -57,6 +57,13 @@ class DepotController extends Controller
         $validatedData['prixProduit'] = $produit->prixProduit;
         $validatedData['prixAchat'] = $produit->prixAchat;
 
+        $existingProduct = Depot::where('nom', $validatedData['nom'])->first();
+
+        if ($existingProduct) {
+            notify()->error('Un produit similaire existe déjà.');
+            return redirect()->route('depot.index')->withInput();
+        }
+
         Depot::create($validatedData);
         notify()->success('Produit créé avec succès.');
         return redirect()->route('depot.index');

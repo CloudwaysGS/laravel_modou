@@ -29,7 +29,6 @@
 <div class="container mt-5">
     <a href="{{url('accueille')}}" class="text-left mb-4 font-weight-bold text-primary">Retour</a>
     <a href="{{url('/expenses/create')}}" class="float-end mb-4 font-weight-bold text-primary"><h5>Ajouter une dépense</h5></a>
-    <h2 class="text-center mb-4 font-weight-bold text-primary">Tableau des Dépenses</h2>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="breadcomb-wp">
@@ -37,17 +36,9 @@
                     <i class="notika-icon notika-windows"></i>
                 </div>
                 <div class="breadcomb-ctn">
-                    <h2>Tableau de données sorties</h2>
+                    <h2>Tableau de données dépenses</h2>
                     <p>Bienvenue sur le <span class="bread-ntd">modèle d'administration</span> Coulibaly</p>
                 </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3" style="display: flex; align-items: center;">
-            <div class="breadcomb-report">
-                <button data-toggle="tooltip" data-placement="left" title="Télécharger le rapport" class="btn"><i class="notika-icon notika-sent"></i></button>
-            </div>
-            <div class="breadcomb-report">
-                <a href="{{ url('/dette/ajout') }}"><button data-toggle="tooltip" data-placement="left" class="btn">Ajouter une dette</button></a>
             </div>
         </div>
 
@@ -67,7 +58,7 @@
             @foreach($expenses as $index => $expense)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td class="text-center">{{ \Carbon\Carbon::parse($expense->date)->format('d/m/Y') }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
                     <td class="text-center text-success font-weight-bold">{{ number_format($expense->amount, 2) }} FCFA</td>
                     <td class="text-center"><span class="badge badge-info">{{ $expense->category }}</span></td>
                     <td class="text-center">

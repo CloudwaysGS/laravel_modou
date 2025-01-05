@@ -220,6 +220,44 @@ class FacturothequeController extends Controller
         return $pdf->stream('facture.pdf');
     }
 
+    public function exportTicket(string $id)
+    {
+        $facturotheque = Facturotheque::findOrFail($id);
+
+        // Mise à jour des données avant le rendu
+        if ($facturotheque->reste == $facturotheque->total) {
+            $facturotheque->reste = null;
+        }
+
+        if ($facturotheque->avance == $facturotheque->total) {
+            $facturotheque->avance = null;
+        }
+
+        $reference = $facturotheque->numFacture;
+        $date = now();
+        $factures = $facturotheque->factures()->get();
+        $vendeur = auth()->user();
+        $avance = $facturotheque->avance;
+        $reste = $facturotheque->reste;
+        $client = $factures->first(); // Vérifiez que la relation client existe
+        $totalMontants = $factures->sum('montant');
+
+        // Génération du PDF avec la taille de page définie
+        $pdf = Pdf::loadView('facture.ticket', [
+            'facture' => $factures,
+            'totalMontants' => $totalMontants,
+            'client' => $client,
+            'vendeur' => $vendeur,
+            'reference' => $reference,
+            'date' => $date,
+            'reste' => $reste,
+            'avance' => $avance,
+            'depot' => $facturotheque->depot,
+        ])->setPaper([0, 0, 226.77, 841.89], 'portrait'); // 80mm x 297mm
+
+        return $pdf->stream('facture.ticket.pdf', compact('id'));
+    }
+
     public function avance(string $id)
     {
         $facture = Facturotheque::find($id);

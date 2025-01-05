@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Dette;
 use App\Services\DetteValidationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DetteController extends Controller
 {
@@ -14,6 +15,7 @@ class DetteController extends Controller
      */
     public function index(Request $request)
     {
+        
         $dette = Dette::searchByName($request->search ?? '');
         return view('dette.liste', compact('dette'));
     }

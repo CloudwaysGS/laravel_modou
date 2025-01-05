@@ -51,6 +51,14 @@ class ProduitController extends Controller
         $validatedData['nomDetail'] = strtoupper($validatedData['nomDetail']);
         $validatedData['nbreVendu'] = $validatedData['nombre'] === null ? null : 0;
 
+        // Vérification de la duplication
+        $existingProduct = Produit::where('nom', $validatedData['nom'])->first();
+
+        if ($existingProduct) {
+            notify()->error('Un produit similaire existe déjà.');
+            return redirect()->route('produit.liste')->withInput();
+        }
+
         Produit::create($validatedData);
         notify()->success('Produit créé avec succès.');
         return redirect()->route('produit.liste');

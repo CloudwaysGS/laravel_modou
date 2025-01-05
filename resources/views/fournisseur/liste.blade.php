@@ -25,7 +25,7 @@
                                     <i class="notika-icon notika-windows"></i>
                                 </div>
                                 <div class="breadcomb-ctn">
-                                    <h2>Tableau de données clients</h2>
+                                    <h2>Tableau de données fournisseurs</h2>
                                     <p>Bienvenue sur le <span class="bread-ntd">modèle d'administration</span> Coulibaly</p>
                                 </div>
                             </div>
