@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -15,6 +17,18 @@ class ExpenseController extends Controller
         return view('statistique.depenses', compact('expenses'));
     }
 
+    public function extraire($id)
+    {
+        $expense = Expense::findOrFail($id);
+
+        // Charger une vue pour le ticket
+        $pdf = Pdf::loadView('depenses.pdf_depense', compact('expense'))
+            ->setPaper([0, 0, 226.77, 841.89], 'portrait') // Dimensions en points (80mm x 297mm)
+            ->setOptions(['defaultFont' => 'Helvetica']); // Police par défaut
+
+        // Télécharger le fichier PDF en tant que ticket
+        return $pdf->stream('expense_' . $expense->id . '.pdf');
+    }
 
     /**
      * Show the form for creating a new resource.

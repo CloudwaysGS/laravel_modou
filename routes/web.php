@@ -148,6 +148,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/facturotheque/acompte/{id}', [FacturothequeController::class, 'avance'])->name('facturotheque.avance');
     Route::get('/facturotheque/export-pdf/{id}', [FacturothequeController::class, 'exportPdf'])->name('facturotheque.export-pdf');
     Route::get('/facturotheque/exportTicket-pdf/{id}', [FacturothequeController::class, 'exportTicket'])->name('facturotheque.exportTicket-pdf');
+    Route::get('/expenses/{id}/extraire', [ExpenseController::class, 'extraire'])->name('expenses.extraire');
+
 
     Route::get('/ajout', function() {
         return view('produit.ajout');

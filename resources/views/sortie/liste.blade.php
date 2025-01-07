@@ -35,7 +35,7 @@
                                 <button data-toggle="tooltip" data-placement="left" title="Télécharger le rapport" class="btn"><i class="notika-icon notika-sent"></i></button>
                             </div>
                             <div class="breadcomb-report">
-                                <a href="{{ url('/sortie/ajout') }}"><button data-toggle="tooltip" data-placement="left" class="btn">Ajouter une entrée</button></a>
+                                <a href="{{ url('/sortie/ajout') }}"><button data-toggle="tooltip" data-placement="left" class="btn">Ajouter une sortie</button></a>
                             </div>
                         </div>
 

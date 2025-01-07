@@ -1,6 +1,4 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+@include('header')
 <style>
     .table th, .table td {
         vertical-align: middle;
@@ -27,7 +25,6 @@
     </div>
 @endif
 <div class="container mt-5">
-    <a href="{{url('accueille')}}" class="text-left mb-4 font-weight-bold text-primary">Retour</a>
     <a href="{{url('/expenses/create')}}" class="float-end mb-4 font-weight-bold text-primary"><h5>Ajouter une dépense</h5></a>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -62,17 +59,25 @@
                     <td class="text-center text-success font-weight-bold">{{ number_format($expense->amount, 2) }} FCFA</td>
                     <td class="text-center"><span class="badge badge-info">{{ $expense->category }}</span></td>
                     <td class="text-center">
-                        <a href="{{ route('expenses.edit', $expense->id) }}" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Modifier
-                        </a>
+                        <div class="d-flex justify-content-center align-items-center">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="notika-icon notika-menu"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                        <a href="{{ route('expenses.edit', $expense->id) }}" ><i class="fas fa-edit"></i> Modifier</a>
+                                                        <a href="{{ route('expenses.extraire', $expense->id) }}" ><i class="fas fa-edit"></i> Extraire</a>
+
                         <form action="{{ route('expenses.destroy', $expense->id) }}" method="POST" class="d-inline delete-expense-form">
                             @csrf
                             @method('DELETE')
-                            <button type="button" class="btn btn-danger btn-sm delete-expense-btn">
+                            <button type="button" >
                                 <i class="fas fa-trash"></i> Supprimer
                             </button>
                         </form>
-
+                                                    </ul>
+                                                </div>
+                                            </div>
                     </td>
                 </tr>
             @endforeach
@@ -103,3 +108,4 @@
     });
 
 </script>
+@include('footer')

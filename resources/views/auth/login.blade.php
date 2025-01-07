@@ -102,10 +102,7 @@
 
                 <!-- Remember Me -->
                 <div class="fm-checkbox">
-                    <label>
-                        <input type="checkbox" id="remember_me" name="remember" class="i-checks">
-                        <i></i> Keep me signed in
-                    </label>
+                    <a href="{{ route('register') }}" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>S'inscrire</span></a>
                 </div>
 
                 <!-- Submit Button -->
