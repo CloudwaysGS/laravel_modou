@@ -12,8 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.5",
-        "mckenziearts/laravel-notify": "^2.5",
-        "spatie/laravel-permission": "^6.10"
+        "mckenziearts/laravel-notify": "^2.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
