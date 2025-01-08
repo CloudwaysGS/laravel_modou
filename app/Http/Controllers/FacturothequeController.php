@@ -18,6 +18,7 @@ class FacturothequeController extends Controller
     public function index(Request $request)
     {
         $mesfactures = Facturotheque::searchByName($request->search ?? '');
+        
         return view('facturotheque.liste', compact('mesfactures'));
     }
 
@@ -187,6 +188,7 @@ class FacturothequeController extends Controller
     public function exportPdf(string $id)
     {
         $facturotheque = Facturotheque::findOrFail($id);
+
         if($facturotheque->reste == $facturotheque->total){
             $facturotheque->reste = null;
         }
@@ -198,6 +200,7 @@ class FacturothequeController extends Controller
         $reference = $facturotheque->numFacture;
         $date = now();
         $factures = $facturotheque->factures()->get();
+        
         $vendeur = auth()->user();
         $avance = $facturotheque->avance;
         $reste = $facturotheque->reste;

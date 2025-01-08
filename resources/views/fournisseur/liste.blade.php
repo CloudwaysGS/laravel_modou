@@ -79,7 +79,11 @@
                                     <td>{{ $fournisseur->adresse }}</td>
                                     <td>
                                         <a href="{{ route('fournisseur.edit', $fournisseur) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                        <a href="{{ route('fournisseur.destroy', $fournisseur) }}" class="btn btn-warning btn-sm">Supprimer</a>
+<form action="{{ route('fournisseur.destroy', $fournisseur) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?')">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+</form>
                                     
                                     </td>
                                 </tr>

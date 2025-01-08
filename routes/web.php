@@ -126,6 +126,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dep/supp/{id}', [DepotController::class, 'destroy'])->name('depot.confirmDestroy');
     Route::get('/depotEntree/supp/{id}', [AddepotController::class, 'destroy'])->name('depotEntree.confirmDestroy');
     Route::get('/depotSortie/supp/{id}', [RemoveDepController::class, 'destroy'])->name('depotSortie.confirmDestroy');
+    Route::delete('/expenses_destry/{id}', [ExpenseController::class, 'destroy'])->name('expenses.destroyExpense');
 
 
     Route::get('/fournisseur/remove/{id}', [DetteFournisseurController::class, 'destroy'])->name('fournisseur.remove');

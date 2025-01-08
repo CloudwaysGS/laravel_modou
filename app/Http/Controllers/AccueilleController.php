@@ -103,8 +103,6 @@ class AccueilleController extends Controller
         return view('accueille', array_merge($totaux, compact('nombreProduit')));
     }
 
-
-
     /**
      * Store a newly created resource in storage.
      */

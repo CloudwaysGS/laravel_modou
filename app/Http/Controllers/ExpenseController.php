@@ -20,7 +20,7 @@ class ExpenseController extends Controller
     public function extraire($id)
     {
         $expense = Expense::findOrFail($id);
-
+        
         // Charger une vue pour le ticket
         $pdf = Pdf::loadView('depenses.pdf_depense', compact('expense'))
             ->setPaper([0, 0, 226.77, 841.89], 'portrait') // Dimensions en points (80mm x 297mm)

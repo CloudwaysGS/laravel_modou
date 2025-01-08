@@ -1,65 +1,132 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ticket de Caisse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket de caisse</title>
     <style>
-        body {
-            font-family: Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 100%;
-            padding: 5px;
-        }
-        .title {
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .separator {
-            border-top: 1px dashed #000;
-            margin: 5px 0;
-        }
-        .details {
-            margin-bottom: 10px;
-        }
-        .details th, .details td {
-            text-align: left;
-            padding: 2px 0;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 10px;
-        }
+        @page {
+    size: 80mm 297mm; /* Taille adaptée au papier */
+    margin: 0; /* Supprimer les marges */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    background: #fff;
+    color: #000;
+    text-align: left; /* Alignement à droite global */
+}
+
+.ticket {
+    width: 72mm; /* Réduire légèrement pour s'adapter aux marges de l'imprimante */
+    margin: 0 auto; /* Centrer horizontalement */
+    padding: 5px;
+    box-sizing: border-box;
+    text-align: left; /* Alignement à droite pour le contenu */
+}
+
+.header, .footer {
+    text-align: left; /* Alignement à droite pour l'en-tête et le pied de page */
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.header p, .footer p {
+    margin: 3px 0;
+    font-size: 13px;
+}
+
+.info {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.info p {
+    margin: 3px 0;
+    font-size: 13px;
+}
+
+.items {
+    border-top: 1px dashed #000;
+    border-bottom: 1px dashed #000;
+    padding: 10px 0;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.items .item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.items .item p {
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.totals {
+    margin: 10px 0;
+    text-align: left;
+}
+
+.totals p {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .ticket {
+        width: 80mm; /* Utiliser toute la largeur disponible */
+        margin: 0 auto; /* Centrer horizontalement */
+        padding: 5px;
+        page-break-after: avoid;
+    }
+}
+
     </style>
+
 </head>
+
 <body>
-    <div class="container">
-        <div class="title">{{ $expense->category }}</div>
-
-        <div class="separator"></div>
-
-        <table class="details" width="100%">
-            <tr>
-                <th>Montant :</th>
-                <td>{{ number_format($expense->amount, 2) }} FCFA</td>
-            </tr>
+    <div class="ticket">
+    
+        <div class="header">
+            <h1>WAKEUR ALY CISSE</h1>
+            <p>TELEPHONE:77 570 65 97</p>
+            <p>NINEA:011426881 2M6</p>
+            <p>RCCM:SN KLK 2024 C 3685</p>
+        </div>
+        <!-- Articles -->
+        <div class="items">
+            <h2>{{ $expense->category }}</h2>
+                <div class="item">
+                    <div class="totals">
+            <p>Montant : <span>{{ number_format($expense->amount, 2) }} FCFA</span></p>
+            <p>Date : <span>{{ $expense->created_at }}</span></p>
             
-            <tr>
-                <th>Date :</th>
-                <td>{{ \Carbon\Carbon::parse($expense->created_at)->format('d/m/Y') }}</td>
-            </tr>
-        </table>
+        </div>
+                </div>
+        </div>
 
-        <div class="separator"></div>
 
+        <!-- Pied de page -->
         <div class="footer">
-            <strong>Merci de votre visite !</strong>
+            <p>Merci pour votre visite !</p>
         </div>
     </div>
 </body>

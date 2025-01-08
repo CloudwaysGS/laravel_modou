@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('nomClient');
             $table->decimal('prix', 10, 2);
+            $table->decimal('prixAchat', 10, 2);
             $table->decimal('quantite', 10, 2);
             $table->decimal('montant', 10, 2);
             $table->decimal('total', 10, 2);
