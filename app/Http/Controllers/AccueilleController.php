@@ -9,6 +9,7 @@ use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class AccueilleController extends Controller
 {
@@ -81,27 +82,43 @@ class AccueilleController extends Controller
      */
     public function caisse()
     {
-        // Récupérer la date actuelle
-        $aujourdhui = Carbon::today();
+        $aujourdhui = Carbon::today()->toDateString();
 
-        // Calculer les totaux globaux et d'aujourd'hui pour les factures et les dépenses
-        $totaux = [
-            'totalFactures' => Facturotheque::sum('total'),
-            'totalFacturesAujourdhui' => Facturotheque::whereDate('created_at', $aujourdhui)->sum('total'),
-            'totalDepenses' => Expense::sum('amount'),
-            'totalDepensesAujourdhui' => Expense::whereDate('created_at', $aujourdhui)->sum('amount'),
-        ];
-        
-        // Calculer les totaux supplémentaires
-        $totaux['totalVenduAuj'] = $totaux['totalFacturesAujourdhui'] - $totaux['totalDepensesAujourdhui'];
-        $totaux['soldeCaisse'] = $totaux['totalFactures'] - $totaux['totalDepenses'];
+        $totaux = $this->calculTotaux($aujourdhui);
 
-        // Compter le nombre de produits
-        $nombreProduit = Produit::count();
+        // Nombre total de produits (avec mise en cache)
+        $nombreProduit = Cache::remember('nombre_produit', 60, function () {
+            return Produit::count();
+        });
 
         // Retourner les données à la vue
         return view('accueille', array_merge($totaux, compact('nombreProduit')));
     }
+
+    private function calculTotaux($aujourdhui)
+    {
+        return Cache::remember("totaux_du_jour_{$aujourdhui}", 60, function () use ($aujourdhui) {
+            $totalFactures = Facturotheque::selectRaw('
+            SUM(total) as totalFactures,
+            SUM(IF(avance IS NOT NULL, avance, total)) as totalFacturesAujourdhui
+        ')->whereDate('created_at', $aujourdhui)->first();
+
+            $totalDepenses = Expense::selectRaw('
+            SUM(amount) as totalDepenses,
+            SUM(IF(DATE(created_at) = ?, amount, 0)) as totalDepensesAujourdhui
+        ', [$aujourdhui])->first();
+
+            return [
+                'totalFactures' => $totalFactures->totalFactures ?? 0,
+                'totalFacturesAujourdhui' => $totalFactures->totalFacturesAujourdhui ?? 0,
+                'totalDepenses' => $totalDepenses->totalDepenses ?? 0,
+                'totalDepensesAujourdhui' => $totalDepenses->totalDepensesAujourdhui ?? 0,
+                'totalVenduAuj' => ($totalFactures->totalFacturesAujourdhui ?? 0) - ($totalDepenses->totalDepensesAujourdhui ?? 0),
+                'soldeCaisse' => ($totalFactures->totalFactures ?? 0) - ($totalDepenses->totalDepenses ?? 0),
+            ];
+        });
+    }
+
 
     /**
      * Store a newly created resource in storage.

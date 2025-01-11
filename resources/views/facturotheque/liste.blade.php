@@ -155,10 +155,10 @@
                                 <td>${item.avance ?? 0}</td> <!-- Si null, affiche 0 -->
                                 <td>${item.reste ?? 0}</td>  <!-- Si null, affiche 0 -->
                                 <td>
-                                    <button class="btn btn-xs" style="background-color: ${
+                            <button class="btn btn-xs" style="background-color: ${
                                 item.etat === 'payée' ? '#00c292' : '#dc3545'
                             }; color: white;">${item.etat}</button>
-                                </td>
+                        </td>
                                 <td>${new Date(item.created_at).toLocaleDateString()}</td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center">
@@ -167,6 +167,7 @@
                 <i class="notika-icon notika-menu"></i>
             </button>
                                         <ul class="dropdown-menu">
+                                            <li><a href="/facturotheque/payer/${item.id}">Payer</a></li>
                                             <li><a href="/facturotheque/modifier/${item.id}">Modifier</a></li>
                                             <li><a href="/facturotheque/export-pdf/${item.id}/">Télécharger</a></li>
                                             <li><a href="/facturotheque/exportTicket-pdf/${item.id}/">Ticket de caisse</a></li>

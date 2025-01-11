@@ -47,6 +47,8 @@ class FacturothequeController extends Controller
     }
 
 
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -110,21 +112,40 @@ class FacturothequeController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * payer a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function payer(string $id)
     {
+        $payer = Facturotheque::find($id);
 
+        if (!$payer) {
+            notify()->success('Facture introuvable.');
+            return redirect()->back();
+        }
+
+        DB::transaction(function () use ($payer) {
+            $payer->update([
+                'etat' => 'payée',  // État de la facture
+                'avance' => null,   // Avance mise à null
+                'reste' => 0,       // Reste à payer à 0
+            ]);
+
+            Dette::where('nom', $payer->nomCient)
+                ->where('montant', $payer->total)
+                ->update([
+                    'etat' => 'payée',  // État de la dette
+                    'reste' => 0,       // Reste à payer à 0
+                    'depot' => $payer->depot, // Mettre à jour le dépôt
+                ]);
+        });
+
+        notify()->success('Facture payée avec succès.');
+        return redirect()->route('facturotheque.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
+
+   
     /**
      * Show the form for editing the specified resource.
      */

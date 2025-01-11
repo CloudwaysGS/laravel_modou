@@ -303,6 +303,7 @@
                                     <li><a href="{{ url('/accueille') }}">Accueille</a></li>
                                     <li><a href="/ventes">Ventes</a></li>
                                     <li><a href="expenses">Dépenses</a></li>
+                                    <li><a href="extraire_total_auj">Dépenses</a></li>
 
                                 </ul>
                             </li>
