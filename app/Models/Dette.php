@@ -9,7 +9,7 @@ class Dette extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id','nom', 'montant', 'reste', 'commentaire', 'etat','depot'];
+    protected $fillable = ['client_id', 'facturotheque_id', 'nom', 'montant', 'reste', 'commentaire', 'etat','depot'];
 
 
     public function client()

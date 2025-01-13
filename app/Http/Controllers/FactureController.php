@@ -102,6 +102,7 @@ class FactureController extends Controller
                     'nomClient' => $client?->nom,
                     'total' => $totalMontants + $montant,
                     'produit_id' => $produitId,
+                    
                 ]);
 
                 $produit->update([

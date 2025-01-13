@@ -108,9 +108,6 @@ class FacturothequeController extends Controller
         }
     }
 
-
-
-
     /**
      * payer a newly created resource in storage.
      */
@@ -118,30 +115,47 @@ class FacturothequeController extends Controller
     {
         $payer = Facturotheque::find($id);
 
+        // Vérifier si la facture existe
         if (!$payer) {
-            notify()->success('Facture introuvable.');
+            notify()->error('Facture introuvable.');
             return redirect()->back();
         }
 
-        DB::transaction(function () use ($payer) {
-            $payer->update([
-                'etat' => 'payée',  // État de la facture
-                'avance' => null,   // Avance mise à null
-                'reste' => 0,       // Reste à payer à 0
-            ]);
-
-            Dette::where('nom', $payer->nomCient)
-                ->where('montant', $payer->total)
-                ->update([
-                    'etat' => 'payée',  // État de la dette
+        try {
+            DB::transaction(function () use ($payer) {
+                // Mettre à jour l'état de la facture
+                $payer->update([
+                    'etat' => 'payée',  // État de la facture
+                    'avance' => null,   // Avance mise à null
                     'reste' => 0,       // Reste à payer à 0
-                    'depot' => $payer->depot, // Mettre à jour le dépôt
                 ]);
-        });
 
-        notify()->success('Facture payée avec succès.');
-        return redirect()->route('facturotheque.index');
+                // Rechercher la dette liée à cette facture
+                $dette = Dette::where('facturotheque_id', $payer->id)->first();
+
+                // Vérifier si une dette est associée
+                if ($dette) {
+                    $dette->update([
+                        'etat' => 'payée',         // État de la dette
+                        'reste' => 0,             // Reste à payer à 0
+                        'depot' => $payer->depot, // Mettre à jour le dépôt
+                    ]);
+                } else {
+                    // Ajouter une notification ou une action alternative
+                    notify()->info('Aucune dette associée à cette facture.');
+                    return redirect()->route('facturotheque.index');
+                }
+            });
+
+            notify()->success('Facture payée avec succès.');
+            return redirect()->route('facturotheque.index');
+        } catch (\Exception $e) {
+            // Gestion des erreurs en cas d'échec de la transaction
+            notify()->error('Une erreur est survenue lors du paiement de la facture.');
+            return redirect()->back();
+        }
     }
+
 
 
 
@@ -291,7 +305,7 @@ class FacturothequeController extends Controller
     public function showAcompte(Request $request, $id)
     {
         $facture = Facturotheque::findOrFail($id);
-
+        
         if ($facture->etat == 'avance') {
             notify()->error('Une avance a déjà été enregistrée. Veuillez consulter la section "Dette".');
             return redirect()->route('facturotheque.index');
@@ -343,6 +357,7 @@ class FacturothequeController extends Controller
         Dette::updateOrCreate(
             [
                 'client_id' => $client->id,
+                'facturotheque_id' => $facture->id,
                 'nom' => $facture->nomCient,
                 'montant' => $facture->total,
             ],
