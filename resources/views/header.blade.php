@@ -410,6 +410,7 @@
                                 <li><a href="{{ url('/accueille') }}">Accueille</a></li>
                                 <li><a href="{{ url('/ventes') }}">Ventes</a></li>
                                 <li><a href="{{ url('expenses') }}">Dépenses</a></li>
+                                <li><a href="{{ route('export_total.pdf') }}">Total en PDF</a></li>
                             </ul>
                         </div>
                         <div id="mailbox" class="tab-pane notika-tab-menu-bg animated flipInX">

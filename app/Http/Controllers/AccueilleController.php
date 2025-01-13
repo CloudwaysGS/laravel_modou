@@ -6,6 +6,7 @@ use App\Models\Expense;
 use App\Models\Facture;
 use App\Models\Facturotheque;
 use App\Models\Produit;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -119,6 +120,22 @@ class AccueilleController extends Controller
         });
     }
 
+
+    public function exportPDF()
+    {
+        $aujourdhui = Carbon::today()->toDateString();
+
+        $totaux = $this->calculTotaux($aujourdhui);
+
+        $totalVenduAuj = $totaux['totalVenduAuj'];
+        $date = now()->format('d/m/Y H:i');
+
+        // Charger la vue pour le PDF
+        $pdf = Pdf::loadView('depenses.total_vendu_auj', compact('totalVenduAuj', 'date'));
+
+        // Télécharger le fichier PDF
+        return $pdf->stream('total_vendu_auj.pdf');
+    }
 
     /**
      * Store a newly created resource in storage.
