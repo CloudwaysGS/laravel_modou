@@ -147,6 +147,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/factures/delete-all', [FactureController::class, 'deleteAll'])->name('factures.deleteAll');
     Route::delete('/factures2/delete-all', [Facture2Controller::class, 'deleteAll'])->name('factures2.deleteAll');
     Route::get('/facturotheque/acompte/{id}', [FacturothequeController::class, 'avance'])->name('facturotheque.avance');
+    Route::get('/facturotheque/détail/{id}', [FacturothequeController::class, 'detail'])->name('facturotheque.detail');
     Route::get('/facturotheque/export-pdf/{id}', [FacturothequeController::class, 'exportPdf'])->name('facturotheque.export-pdf');
     Route::get('/facturotheque/exportTicket-pdf/{id}', [FacturothequeController::class, 'exportTicket'])->name('facturotheque.exportTicket-pdf');
     Route::get('/expenses/{id}/extraire', [ExpenseController::class, 'extraire'])->name('expenses.extraire');

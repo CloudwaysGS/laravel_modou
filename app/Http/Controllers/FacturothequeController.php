@@ -372,9 +372,14 @@ class FacturothequeController extends Controller
         return redirect()->route('facturotheque.index');
     }
 
+    public function detail(Request $request, $id)
+    {
+        $facture = Facturotheque::with(['factures' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->findOrFail($id);
 
-
-
-
-
+        $f = $facture->factures;
+        //dd($f);
+        return view('facturotheque.detail', compact('f'));
+    }
 }

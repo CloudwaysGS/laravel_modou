@@ -172,6 +172,7 @@
                                             <li><a href="/facturotheque/export-pdf/${item.id}/">Télécharger</a></li>
                                             <li><a href="/facturotheque/exportTicket-pdf/${item.id}/">Ticket de caisse</a></li>
                                             <li><a href="/facturotheque/acompte/${item.id}">Avance</a></li>
+                                            <li><a href="/facturotheque/détail/${item.id}">Détail</a></li>
                                             <li><a href="/facturotheque/delete/${item.id}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet élément ?');">Supprimer</a></li>
                                         </ul>
                                     </div>

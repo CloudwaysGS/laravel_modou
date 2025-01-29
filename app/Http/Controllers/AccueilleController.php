@@ -21,12 +21,12 @@ class AccueilleController extends Controller
     {
         // Liste des périodes à analyser
         $periods = [
-            'Ajourd\'hui    ' => today(),
+            'Aujourd\'hui' => today(),
             'Hier' => today()->subDay(),
             'Avant_hier' => today()->subDays(2),
             'Cette semaine' => [now()->startOfWeek(), now()->endOfWeek()],
-            'Ce_mois' => [now()->startOfMonth(), now()->endOfMonth()],
-            'Derniers_trois_mois' => [now()->subMonths(3)->startOfMonth(), now()->endOfMonth()],
+            'Ce mois' => [now()->startOfMonth(), now()->endOfMonth()],
+            'Derniers trois mois' => [now()->subMonths(3)->startOfMonth(), now()->endOfMonth()],
             'Cette année' => [now()->startOfYear(), now()->endOfYear()],
             'Année dernière' => [now()->subYear()->startOfYear(), now()->subYear()->endOfYear()],
         ];
@@ -37,19 +37,27 @@ class AccueilleController extends Controller
         foreach ($periods as $key => $period) {
             if (is_array($period)) {
                 // Si la période est un intervalle (ex: cette semaine)
-                $total = Facturotheque::whereBetween('created_at', $period)->sum('total');
+                $totals = Facturotheque::selectRaw('
+                SUM(total) as total,
+                SUM(IF(avance IS NOT NULL, avance, total)) as totalWithAvance
+            ')->whereBetween('created_at', $period)->first();
+
                 $max = Facturotheque::whereBetween('created_at', $period)->max('total');
                 $min = Facturotheque::whereBetween('created_at', $period)->min('total');
 
                 // Récupérer le produit le plus vendu pour cette période
                 $topProduct = Facture::whereBetween('created_at', $period)
-                    ->select('produit_id', DB::raw('SUM(total) as total_sales'))
+                    ->select('produit_id', DB::raw('SUM(montant) as total_sales'))
                     ->groupBy('produit_id')
                     ->orderByDesc('total_sales')
                     ->first();
             } else {
                 // Si la période est une date spécifique (ex: aujourd'hui, hier)
-                $total = Facturotheque::whereDate('created_at', $period)->sum('total');
+                $totals = Facturotheque::selectRaw('
+                SUM(total) as total,
+                SUM(IF(avance IS NOT NULL, avance, total)) as totalWithAvance
+            ')->whereDate('created_at', $period)->first();
+                //dd($totals);
                 $max = Facturotheque::whereDate('created_at', $period)->max('total');
                 $min = Facturotheque::whereDate('created_at', $period)->min('total');
 
@@ -62,10 +70,11 @@ class AccueilleController extends Controller
             }
 
             $salesData[$key] = [
-                'total' => $total,
+                'total' => $totals->total,
+                'totalWithAvance' => $totals->totalWithAvance,
                 'max' => $max,
                 'min' => $min,
-                'topProduct' => $topProduct ? $topProduct->product_id : null, // Assurez-vous d'avoir l'ID du produit
+                'topProduct' => $topProduct ? $topProduct->produit_id : null, // Assurez-vous d'avoir l'ID du produit
             ];
         }
 
@@ -74,6 +83,7 @@ class AccueilleController extends Controller
             'salesData' => $salesData,
         ]);
     }
+
 
 
 
@@ -130,50 +140,9 @@ class AccueilleController extends Controller
         $totalVenduAuj = $totaux['totalVenduAuj'];
         $date = now()->format('d/m/Y H:i');
 
-        // Charger la vue pour le PDF
         $pdf = Pdf::loadView('depenses.total_vendu_auj', compact('totalVenduAuj', 'date'));
 
-        // Télécharger le fichier PDF
         return $pdf->stream('total_vendu_auj.pdf');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
