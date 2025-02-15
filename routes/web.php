@@ -1,27 +1,29 @@
 <?php
 
-use App\Http\Controllers\AccueilleController;
-use App\Http\Controllers\AddepotController;
-use App\Http\Controllers\ClientController;
+use App\Models\Client;
+use App\Models\Produit;
+use App\Models\Facturotheque;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DepotController;
 use App\Http\Controllers\DetteController;
-use App\Http\Controllers\DetteFournisseurController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EntreeController;
-use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\Facture2Controller;
-use App\Http\Controllers\FactureController;
-use App\Http\Controllers\FacturothequeController;
-use App\Http\Controllers\FournisseurController;
-use App\Http\Controllers\PaidFournisseurController;
-use App\Http\Controllers\PaiementController;
-use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\SortieController;
-use App\Models\Client;
-use App\Models\Facturotheque;
-use App\Models\Produit;
+use App\Http\Controllers\AddepotController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\FactureController;
+use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SalaireController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\Facture2Controller;
+use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\AccueilleController;
 use App\Http\Controllers\RemoveDepController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\FacturothequeController;
+use App\Http\Controllers\PaidFournisseurController;
+use App\Http\Controllers\DetteFournisseurController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
@@ -153,7 +155,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/expenses/{id}/extraire', [ExpenseController::class, 'extraire'])->name('expenses.extraire');
     Route::get('/facturotheque/payer/{id}', [FacturothequeController::class, 'payer'])->name('facturotheque.payer');
     Route::get('/export-pdf-total', [AccueilleController::class, 'exportPDF'])->name('export_total.pdf');
-
+    Route::resource('employees', EmployeeController::class);
+    Route::resource('salaries', SalaireController::class);
 
     Route::get('/ajout', function() {
         return view('produit.ajout');

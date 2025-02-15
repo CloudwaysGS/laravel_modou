@@ -410,6 +410,8 @@
                                 <li><a href="{{ url('/accueille') }}">Accueille</a></li>
                                 <li><a href="{{ url('/ventes') }}">Ventes</a></li>
                                 <li><a href="{{ url('expenses') }}">Dépenses</a></li>
+                                <li><a href="{{ url('employees') }}">Employées</a></li>
+                                <li><a href="{{ url('salaries') }}">Salaires</a></li>
                                 <li><a href="{{ route('export_total.pdf') }}">Total en PDF</a></li>
                             </ul>
                         </div>
